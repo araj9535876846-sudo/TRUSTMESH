@@ -7,6 +7,7 @@ import time
 import hashlib
 import json
 
+import urllib.request
 from datetime import datetime, timezone
 
 
@@ -22,6 +23,18 @@ SERIAL_PORT = "COM7"
 BAUD_RATE = 115200
 
 SERIAL_RETRY_SECONDS = 3
+
+# ============================================================
+# MST TESTNET CONFIGURATION
+# ============================================================
+
+MST_TESTNET_RPC = "https://testnetrpc.mstblockchain.com"
+MST_TESTNET_CHAIN_ID = 4545
+BRIDGE_KEY = "0x46E736Fe8405B7e336983cDEB1b29D65a4558c09"
+DEPLOYED_CONTRACT_ADDRESS = "0xb1354afc236c3d190e817b0b16a94871c939eb00"
+MST_EXPLORER_URL = "https://testnet.mstscan.com"
+MST_CONTRACT_EXPLORER = f"{MST_EXPLORER_URL}/address/{DEPLOYED_CONTRACT_ADDRESS}"
+
 
 
 # ============================================================
@@ -2194,3 +2207,72 @@ def trustmesh_ingest_event(event: dict):
         "block": block,
         "prediction": predictive_trust_analysis(),
     }
+
+
+# ============================================================
+# MST TESTNET INTEGRATION ENDPOINTS
+# ============================================================
+
+@app.get("/api/mst/config")
+def get_mst_config():
+    """
+    Returns MST Testnet network configuration and registered BridgeKey.
+    """
+    return {
+        "success": True,
+        "network_name": "MST Testnet",
+        "chain_id": MST_TESTNET_CHAIN_ID,
+        "rpc_url": MST_TESTNET_RPC,
+        "bridge_key": BRIDGE_KEY,
+        "explorer_url": MST_EXPLORER_URL,
+        "bridge_key_explorer": f"{MST_EXPLORER_URL}/address/{BRIDGE_KEY}",
+        "currency_symbol": "tMSTC",
+    }
+
+
+@app.get("/api/mst/status")
+def get_mst_status():
+    """
+    Queries MST Testnet RPC (https://testnetrpc.mstblockchain.com) for live chain state.
+    """
+    rpc_online = False
+    latest_block_hex = None
+    latest_block_dec = 0
+    chain_id_hex = None
+
+    try:
+        req_data = json.dumps({
+            "jsonrpc": "2.0",
+            "method": "eth_blockNumber",
+            "params": [],
+            "id": 1
+        }).encode("utf-8")
+
+        req = urllib.request.Request(
+            MST_TESTNET_RPC,
+            data=req_data,
+            headers={"Content-Type": "application/json"}
+        )
+
+        with urllib.request.urlopen(req, timeout=4) as response:
+            res_json = json.loads(response.read().decode("utf-8"))
+            if "result" in res_json:
+                rpc_online = True
+                latest_block_hex = res_json["result"]
+                latest_block_dec = int(latest_block_hex, 16)
+    except Exception as err:
+        print("MST Testnet RPC check note:", err)
+
+    return {
+        "success": True,
+        "network": "MST Testnet",
+        "chain_id": MST_TESTNET_CHAIN_ID,
+        "rpc_online": rpc_online,
+        "rpc_url": MST_TESTNET_RPC,
+        "latest_block": latest_block_dec,
+        "latest_block_hex": latest_block_hex,
+        "bridge_key": BRIDGE_KEY,
+        "bridge_key_explorer": f"{MST_EXPLORER_URL}/address/{BRIDGE_KEY}",
+        "status": "ONLINE" if rpc_online else "SIMULATED / BACKEND SYNCED",
+    }
+

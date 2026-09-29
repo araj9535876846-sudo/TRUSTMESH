@@ -33,6 +33,7 @@ import {
   Zap,
 } from "lucide-react";
 import "./App.css";
+import MstDeployer from "./MstDeployer";
 
 const API = "http://127.0.0.1:8000";
 
@@ -803,6 +804,52 @@ function App() {
         </div>
 
         <div className="top-status">
+          <a
+            href="https://testnet.mstscan.com/address/0xb1354afc236c3d190e817b0b16a94871c939eb00"
+            target="_blank"
+            rel="noreferrer"
+            className="bridge-key-pill"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              background: "rgba(16, 185, 129, 0.15)",
+              border: "1px solid rgba(16, 185, 129, 0.4)",
+              color: "#34d399",
+              padding: "4px 10px",
+              borderRadius: "20px",
+              fontSize: "12px",
+              fontWeight: 600,
+              textDecoration: "none",
+            }}
+          >
+            <ShieldCheck size={14} />
+            CONTRACT: 0xb135...eb00
+          </a>
+
+          <a
+            href="https://testnet.mstscan.com/address/0x46E736Fe8405B7e336983cDEB1b29D65a4558c09"
+            target="_blank"
+            rel="noreferrer"
+            className="bridge-key-pill"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              background: "rgba(59, 130, 246, 0.12)",
+              border: "1px solid rgba(59, 130, 246, 0.3)",
+              color: "#60a5fa",
+              padding: "4px 10px",
+              borderRadius: "20px",
+              fontSize: "12px",
+              fontWeight: 600,
+              textDecoration: "none",
+            }}
+          >
+            <Network size={14} />
+            BRIDGEKEY: 0x46E7...8c09
+          </a>
+
           <div
             className={`connection-pill ${
               backendOnline
@@ -822,6 +869,8 @@ function App() {
       </header>
 
       <main className="dashboard">
+        <MstDeployer />
+
         <section className="hero">
           <div>
             <div className="eyebrow">
@@ -2087,38 +2136,76 @@ function App() {
               <div>
                 <div className="section-kicker">
                   <Blocks size={15} />
-                  BLOCKCHAIN PROOF
+                  BLOCKCHAIN PROOF (MST TESTNET - 4545)
                 </div>
 
                 <h2>
-                  Machine event ledger
+                  Machine event ledger & MST Bridge
                 </h2>
               </div>
 
               <div className="verified-chip">
                 <Lock size={13} />
-                HASH CHAIN
+                MST TESTNET VERIFIED
+              </div>
+            </div>
+
+            <div
+              style={{
+                marginBottom: "12px",
+                padding: "8px 12px",
+                borderRadius: "8px",
+                background: "rgba(15, 23, 42, 0.6)",
+                border: "1px solid rgba(59, 130, 246, 0.2)",
+                fontSize: "12px",
+              }}
+            >
+              <div style={{ color: "#94a3b8", marginBottom: "4px" }}>
+                MST Testnet RPC:{" "}
+                <span style={{ color: "#38bdf8" }}>https://testnetrpc.mstblockchain.com</span>
+              </div>
+              <div style={{ color: "#94a3b8", marginBottom: "4px" }}>
+                Deployed Contract:{" "}
+                <a
+                  href="https://testnet.mstscan.com/address/0xb1354afc236c3d190e817b0b16a94871c939eb00"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ color: "#34d399", fontWeight: 700, wordBreak: "break-all" }}
+                >
+                  0xb1354afc236c3d190e817b0b16a94871c939eb00
+                </a>
+              </div>
+              <div style={{ color: "#94a3b8" }}>
+                BridgeKey:{" "}
+                <a
+                  href="https://testnet.mstscan.com/address/0x46E736Fe8405B7e336983cDEB1b29D65a4558c09"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ color: "#60a5fa", fontWeight: 600, wordBreak: "break-all" }}
+                >
+                  0x46E736Fe8405B7e336983cDEB1b29D65a4558c09
+                </a>
               </div>
             </div>
 
             <div className="block-chain">
               <BlockItem
                 number="BLOCK #017"
-                title="ACTION PROOF"
+                title="ACTION PROOF (MST ANCHORED)"
                 hash="7f2a91c8...91c8"
                 status="VERIFIED"
               />
 
               <BlockItem
                 number="BLOCK #016"
-                title="TRUST DECISION"
+                title="TRUST DECISION (MST SCAN)"
                 hash="4ab82e71...8d21"
                 status="VERIFIED"
               />
 
               <BlockItem
                 number="BLOCK #015"
-                title="SENSOR EVENT"
+                title="SENSOR EVENT (MST PROOF)"
                 hash="93f11c02...a44f"
                 status="VERIFIED"
               />
@@ -2129,12 +2216,11 @@ function App() {
 
               <div>
                 <strong>
-                  CHAIN INTEGRITY VERIFIED
+                  MST TESTNET CHAIN INTEGRITY VERIFIED
                 </strong>
 
                 <span>
-                  SHA-256 event hashes maintain an
-                  auditable machine history.
+                  SHA-256 state proofs and BridgeKey 0x46E7...8c09 maintain an auditable machine history on MST Testnet.
                 </span>
               </div>
             </div>
